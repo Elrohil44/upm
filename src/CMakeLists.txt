@@ -378,14 +378,26 @@ macro(_upm_swig_python)
       OUTPUT_NAME _pyupm_${libname}
       LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_PYTHON_BINARY_DIR})
 
-  # Install .py's to python packages directory/upm
-  install (FILES ${swig_extra_generated_files}
-      DESTINATION ${PYTHON_PACKAGES_PATH}/upm
+  if (CMAKE_VERSION VERSION_LESS "3.12")
+      set(SUPPORT_FILES ${swig_extra_generated_files})
+  else ()
+      get_property(SUPPORT_FILES TARGET ${python_wrapper_target} PROPERTY SWIG_SUPPORT_FILES)
+  endif ()
+
+  install (FILES ${SUPPORT_FILES}
+      DESTINATION ${PYTHON_PACKAGES_PATH}/upm/
       COMPONENT ${CMAKE_PROJECT_NAME}-python${PYTHON_VERSION_MAJOR})
 
   # Install python wrapper module library
+
+  if (SWIG_VERSION VERSION_LESS "3.0.9")
+      set(python_wrapper_dest ${PYTHON_PACKAGES_PATH}/upm)
+  else ()
+      set(python_wrapper_dest ${PYTHON_PACKAGES_PATH})
+  endif ()
+
   install (TARGETS ${python_wrapper_target}
-      DESTINATION ${PYTHON_PACKAGES_PATH}/upm
+      DESTINATION ${python_wrapper_dest}
       COMPONENT ${CMAKE_PROJECT_NAME}-python${PYTHON_VERSION_MAJOR})
 
   # Restore CMAKE_CURRENT_BINARY_DIR
