@@ -170,19 +170,19 @@ BMM150::BMM150(std::string initStr) : mraaIo(initStr)
             setOpmode(opmode);
         }
         if(tok.substr(0, 19) == "setInterruptEnable:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(19), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(19), nullptr, 0);
             setInterruptEnable(bits);
         }
         if(tok.substr(0, 19) == "setInterruptConfig:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(19), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(19), nullptr, 0);
             setInterruptConfig(bits);
         }
         if(tok.substr(0, 17) == "setRepetitionsXY:") {
-            u_int8_t reps = (u_int8_t)std::stoul(tok.substr(17), nullptr, 0);
+            uint8_t reps = (uint8_t)std::stoul(tok.substr(17), nullptr, 0);
             setRepetitionsXY(reps);
         }
         if(tok.substr(0, 16) == "setRepetitionsZ:") {
-            u_int8_t reps = (u_int8_t)std::stoul(tok.substr(16), nullptr, 0);
+            uint8_t reps = (uint8_t)std::stoul(tok.substr(16), nullptr, 0);
             setRepetitionsZ(reps);
         }
         if(tok.substr(0, 14) == "setPresetMode:") {

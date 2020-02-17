@@ -173,23 +173,23 @@ BMG160::BMG160(std::string initStr) : mraaIo(initStr)
             fifoConfig(mode, axes);
         }
         if(tok.substr(0, 20) == "setInterruptEnable0:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(20), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(20), nullptr, 0);
             setInterruptEnable0(bits);
         }
         if(tok.substr(0, 17) == "setInterruptMap0:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(17), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(17), nullptr, 0);
             setInterruptMap0(bits);
         }
         if(tok.substr(0, 17) == "setInterruptMap1:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(17), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(17), nullptr, 0);
             setInterruptMap1(bits);
         }
         if(tok.substr(0, 16) == "setInterruptSrc:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(16), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(16), nullptr, 0);
             setInterruptSrc(bits);
         }
         if(tok.substr(0, 26) == "setInterruptOutputControl:") {
-            u_int8_t bits = (u_int8_t)std::stoul(tok.substr(26), nullptr, 0);
+            uint8_t bits = (uint8_t)std::stoul(tok.substr(26), nullptr, 0);
             setInterruptOutputControl(bits);
         }
         if(tok.substr(0, 26) == "setInterruptLatchBehavior:") {
