@@ -13,6 +13,11 @@ option (BUILDEXAMPLES "Build C/C++/JAVA examples" OFF)
 option (NPM "Generate NPM/GYP tarballs" OFF)
 option (BUILDTESTS "Generate check-ups for upm" OFF)
 option (WERROR "Make all warnings into errors." ON)
+option (EMULATE_BME280 "Emulate BME280 sensor" OFF)
+
+if (EMULATE_BME280)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DEMULATE_BME280=1")
+endif()
 
 # Warn if building in source root
 if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")

@@ -63,6 +63,7 @@ void _csOff(const bmp280_context dev)
         mraa_gpio_write(dev->gpio, 1);
 }
 
+#if !defined(EMULATE_BME280)
 // These functions come from the BMP280 datasheet, section 3.11.3
 
 // Returns temperature in DegC, resolution is 0.01 DegC. Output value
@@ -128,6 +129,8 @@ static uint32_t _bme280_compensate_H_int32(const bmp280_context dev,
     v_x1_u32r = (v_x1_u32r > 419430400 ? 419430400 : v_x1_u32r);
     return (int32_t)(v_x1_u32r>>12);
 }
+
+#endif
 
 // read the calibration data
 upm_result_t _read_calibration_data(const bmp280_context dev)
@@ -393,7 +396,7 @@ upm_result_t bmp280_update(const bmp280_context dev)
 
     // 20 bits unsigned stored in a 32bit signed quantity
 
-#if defined(BMP280_USE_TEST_DATA)
+#if defined(BMP280_USE_TEST_DATA) && !defined(EMULATE_BME280)
     // taken from datasheet, section 3.12
     temp = 519888;
     pres = 415148;
@@ -402,12 +405,16 @@ upm_result_t bmp280_update(const bmp280_context dev)
     pres = ( (bmp_data[2] >> 4) | (bmp_data[1] << 4) | (bmp_data[0] << 12) );
 #endif
 
+#if defined(EMULATE_BME280)
+    uint32_t utemp = temp;
+    dev->temperature = (int32_t)(utemp & 0x80000 ? -(utemp & 0x7ffff) : (utemp & 0x7ffff));
+    dev->pressure = (float) pres;
+#else
     dev->temperature = (float)_bmp280_compensate_T_int32(dev, temp);
-    dev->temperature /= 100.0;
-
     dev->pressure = (float)_bmp280_compensate_P_int64(dev, pres);
+#endif
+    dev->temperature /= 100.0;
     dev->pressure /= 256.0;
-
     // BME280?
     if (dev->isBME)
     {
@@ -423,11 +430,13 @@ upm_result_t bmp280_update(const bmp280_context dev)
                    __FUNCTION__);
             return UPM_ERROR_OPERATION_FAILED;
         }
-
         // 20 bits unsigned stored in a 32bit signed quantity
         int32_t hum = ( (bme_data[0] << 8) | bme_data[1] );
-
+#if defined(EMULATE_BME280)
+        dev->humidity = (float) hum;
+#else
         dev->humidity = (float)_bme280_compensate_H_int32(dev, hum);
+#endif
         dev->humidity /= 1024.0;
     }
 
